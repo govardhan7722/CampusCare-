@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusCare - Student Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <h2>CampusCare</h2>
+      <p class="sidebar-subtitle">Management System</p>
+
+      <nav>
+        <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+        <button class="nav-btn" data-page="students">Students</button>
+        <button class="nav-btn" data-page="attendance">Attendance</button>
+        <button class="nav-btn" data-page="calendar">Calendar</button>
+        <button class="nav-btn" data-page="timetable">Class Timetable</button>
+        <button class="nav-btn" data-page="exams">Exams & Marks</button>
+        <button class="nav-btn" data-page="reports">Reports</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <button id="themeBtn" class="secondary">Toggle Dark Mode</button>
+        <button id="logoutBtn" class="danger">Logout</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p class="muted">Student Management and Attendance Tracking System</p>
+        </div>
+        <span id="todayDate"></span>
+      </header>
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="page active">
+        <div class="stats-grid">
+          <div class="stat-card"><p>Total Students</p><h2 id="totalStudents">0</h2></div>
+          <div class="stat-card"><p>Present Today</p><h2 id="presentToday">0</h2></div>
+          <div class="stat-card"><p>Absent Today</p><h2 id="absentToday">0</h2></div>
+          <div class="stat-card"><p>Total Exams</p><h2 id="totalExams">0</h2></div>
+        </div>
+        <div class="panel">
+          <h2>Welcome to Student Management System</h2>
+          <p>Manage student profiles, daily attendance, class timetables and examination marks from one place.</p>
+        </div>
+      </section>
+
+      <!-- STUDENTS -->
+      <section id="students" class="page">
+        <div class="panel">
+          <h2 id="studentFormTitle">Add Student</h2>
+          <form id="studentForm" class="form-grid">
+            <input type="hidden" id="studentId">
+            <label>Student Name<input id="studentName" required></label>
+            <label>Roll Number<input id="studentRoll" required></label>
+            <label>Class / Department<input id="studentClass" required></label>
+            <label>Email<input id="studentEmail" type="email"></label>
+            <label>Phone<input id="studentPhone"></label>
+            <label>Date of Birth<input id="studentDob" type="date"></label>
+            <label class="full">Address<textarea id="studentAddress"></textarea></label>
+            <div class="full form-actions">
+              <button type="submit">Save Student</button>
+              <button type="button" class="secondary" id="cancelStudentEdit">Clear</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading">
+            <h2>Student Records</h2>
+            <input id="studentSearch" placeholder="Search students...">
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Roll No.</th><th>Name</th><th>Class</th><th>Email</th><th>Actions</th></tr></thead>
+              <tbody id="studentTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ATTENDANCE -->
+      <section id="attendance" class="page">
+        <div class="panel">
+          <h2>Daily Attendance</h2>
+          <label>Select Date<input type="date" id="attendanceDate"></label>
+          <p class="muted">Change a student's status at any time and save again to correct mistakes.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Roll No.</th><th>Student</th><th>Class</th><th>Attendance Status</th></tr></thead>
+              <tbody id="attendanceTable"></tbody>
+            </table>
+          </div>
+          <button id="saveAttendance">Save Attendance</button>
+          <p id="attendanceMessage" class="message"></p>
+        </div>
+      </section>
+
+      <!-- CALENDAR -->
+      <section id="calendar" class="page">
+        <div class="panel">
+          <div class="panel-heading">
+            <h2>Monthly Attendance Calendar</h2>
+            <input type="month" id="calendarMonth">
+          </div>
+          <div class="calendar-legend">
+            <span>🟢 Present</span><span>🔴 Absent</span><span>⚪ No record</span>
+          </div>
+          <div id="calendarGrid" class="calendar-grid"></div>
+        </div>
+      </section>
+
+      <!-- TIMETABLE -->
+      <section id="timetable" class="page">
+        <div class="panel">
+          <h2 id="timetableFormTitle">Add Class Timetable</h2>
+          <form id="timetableForm" class="form-grid">
+            <input type="hidden" id="timetableId">
+            <label>Day
+              <select id="ttDay" required>
+                <option value="">Select day</option>
+                <option>Monday</option><option>Tuesday</option>
+                <option>Wednesday</option><option>Thursday</option>
+                <option>Friday</option><option>Saturday</option>
+              </select>
+            </label>
+            <label>Class / Department<input id="ttClass" required placeholder="e.g. BCA 1st Year"></label>
+            <label>Subject<input id="ttSubject" required></label>
+            <label>Teacher / Lecturer<input id="ttTeacher" required></label>
+            <label>Start Time<input id="ttStart" type="time" required></label>
+            <label>End Time<input id="ttEnd" type="time" required></label>
+            <label>Room Number<input id="ttRoom" placeholder="e.g. Room 101"></label>
+            <div class="full form-actions">
+              <button type="submit">Save Timetable</button>
+              <button type="button" class="secondary" id="cancelTimetableEdit">Clear</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading">
+            <h2>Weekly Timetable</h2>
+            <select id="timetableDayFilter">
+              <option value="All">All Days</option>
+              <option>Monday</option><option>Tuesday</option>
+              <option>Wednesday</option><option>Thursday</option>
+              <option>Friday</option><option>Saturday</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Day</th><th>Time</th><th>Class</th><th>Subject</th><th>Teacher</th><th>Room</th><th>Actions</th></tr></thead>
+              <tbody id="timetableTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXAMS -->
+      <section id="exams" class="page">
+        <div class="panel">
+          <h2 id="examFormTitle">Create Examination</h2>
+          <form id="examForm" class="form-grid">
+            <input type="hidden" id="examId">
+            <label>Exam Name<input id="examName" required placeholder="e.g. Internal 1"></label>
+            <label>Subject<input id="examSubject" required></label>
+            <label>Exam Date<input id="examDate" type="date" required></label>
+            <label>Maximum Marks<input id="examMax" type="number" min="1" required></label>
+            <label>Pass Marks<input id="examPass" type="number" min="0" required></label>
+            <div class="full form-actions">
+              <button type="submit">Save Exam</button>
+              <button type="button" class="secondary" id="cancelExamEdit">Clear</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <h2>Examination List</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Exam</th><th>Subject</th><th>Date</th><th>Maximum</th><th>Pass Marks</th><th>Actions</th></tr></thead>
+              <tbody id="examTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Enter Student Marks</h2>
+          <div class="form-grid">
+            <label>Select Exam<select id="marksExam"></select></label>
+            <label>Select Student<select id="marksStudent"></select></label>
+            <label>Marks Obtained<input id="marksScore" type="number" min="0" step="0.5"></label>
+            <div class="form-actions">
+              <button id="saveMarks" type="button">Save Marks</button>
+            </div>
+          </div>
+          <p id="marksMessage" class="message"></p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading">
+            <h2>Student Results</h2>
+            <select id="resultsExam"></select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Roll No.</th><th>Student</th><th>Marks</th><th>Percentage</th><th>Grade</th><th>Result</th></tr></thead>
+              <tbody id="resultsTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- REPORTS -->
+      <section id="reports" class="page">
+        <div class="panel">
+          <h2>Attendance Reports</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Roll No.</th><th>Student</th><th>Present</th><th>Absent</th><th>Attendance %</th><th>Status</th></tr></thead>
+              <tbody id="reportsTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

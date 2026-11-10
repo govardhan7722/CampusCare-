@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusCare Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+  <div class="login-card">
+    <h1>Student Management</h1>
+    <p class="muted">Admin Portal</p>
+
+    <form id="loginForm">
+      <label>Username</label>
+      <input id="username" required placeholder="Enter username">
+
+      <label>Password</label>
+      <input id="password" type="password" required placeholder="Enter password">
+
+      <button type="submit">Login</button>
+      <p id="loginMessage" class="message"></p>
+    </form>
+
+    <div class="register-area">
+      <h3>Create First Admin</h3>
+      <form id="registerForm">
+        <input id="newUsername" required minlength="3" placeholder="New username">
+        <input id="newPassword" type="password" required minlength="6" placeholder="New password">
+        <button type="submit" class="secondary">Register Admin</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    if (sessionStorage.getItem("loggedIn") === "true") {
+      location.href = "index.html";
+    }
+
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const message = document.getElementById("loginMessage");
+
+    loginForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const account = JSON.parse(localStorage.getItem("adminAccount") || "null");
+
+      if (!account) {
+        message.textContent = "Please create an admin account first.";
+        return;
+      }
+
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value;
+
+      if (user === account.username && pass === account.password) {
+        sessionStorage.setItem("loggedIn", "true");
+        location.href = "index.html";
+      } else {
+        message.textContent = "Incorrect username or password.";
+      }
+    });
+
+    registerForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      if (localStorage.getItem("adminAccount")) {
+        message.textContent = "An admin account already exists.";
+        return;
+      }
+
+      const username = document.getElementById("newUsername").value.trim();
+      const password = document.getElementById("newPassword").value;
+
+      if (username.length < 3 || password.length < 6) {
+        message.textContent = "Username needs 3 characters and password needs 6.";
+        return;
+      }
+
+      localStorage.setItem("adminAccount", JSON.stringify({username, password}));
+      message.textContent = "Admin registered! You can now log in.";
+      registerForm.reset();
+    });
+  </script>
+</body>
+</html>
